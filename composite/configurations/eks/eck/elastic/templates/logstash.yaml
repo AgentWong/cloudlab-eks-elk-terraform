@@ -10,29 +10,3 @@ spec:
     - name: quickstart
       clusterName: quickstart
   version: 8.8.0
-  pipelines:
-    - pipeline.id: main
-      config.string: |
-        input {
-          beats {
-            port => 5044
-          }
-        }
-        output {
-          elasticsearch {
-            hosts => [ "${QS_ES_HOSTS}" ]
-            user => "${QS_ES_USER}"
-            password => "${QS_ES_PASSWORD}"
-            cacert => "${QS_ES_SSL_CERTIFICATE_AUTHORITY}"
-          }
-        }
-  services:
-    - name: beats
-      service:
-        spec:
-          type: NodePort
-          ports:
-            - port: 5044
-              name: "filebeat"
-              protocol: TCP
-              targetPort: 5044
