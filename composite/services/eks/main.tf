@@ -26,6 +26,9 @@ module "eks" {
   cluster_version                = var.cluster_version
   cluster_endpoint_public_access = true
 
+  # IPV6
+  cluster_ip_family = "ipv6"
+
   # We are using the IRSA created below for permissions
   # However, we have to deploy with the policy attached FIRST (when creating a fresh cluster)
   # and then turn this off after the cluster/node group is created. Without this initial policy,
@@ -99,7 +102,7 @@ module "vpc_cni_irsa" {
 
   role_name_prefix      = "VPC-CNI-IRSA"
   attach_vpc_cni_policy = true
-  vpc_cni_enable_ipv6   = false
+  vpc_cni_enable_ipv6   = true
 
   oidc_providers = {
     main = {
