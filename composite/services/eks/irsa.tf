@@ -5,7 +5,7 @@ module "ebs_csi_irsa" {
   role_name_prefix = "EBS-CSI-IRSA"
 
   attach_ebs_csi_policy = true
-  ebs_csi_kms_cmk_ids   = module.ebs_kms_key.key_arn
+  ebs_csi_kms_cmk_ids   = [module.ebs_kms_key.key_arn]
 
   oidc_providers = {
     main = {
