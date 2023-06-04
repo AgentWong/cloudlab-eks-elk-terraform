@@ -14,7 +14,7 @@ data "kubectl_file_documents" "crds" {
   content = file("${path.module}/templates/crds.yaml")
 }
 
-resource "kubectl_manifest" "test" {
+resource "kubectl_manifest" "crds" {
   for_each  = data.kubectl_file_documents.crds.manifests
   yaml_body = each.value
 }
