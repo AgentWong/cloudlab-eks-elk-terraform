@@ -14,18 +14,18 @@ data "kubectl_file_documents" "crds" {
   content = file("${path.module}/templates/crds.yaml")
 }
 
-resource "kubernetes_manifest" "elastic_crds" {
-  for_each = data.kubectl_file_documents.crds.manifests
-  manifest = each.value
+resource "kubectl_manifest" "test" {
+  for_each  = data.kubectl_file_documents.crds.manifests
+  yaml_body = each.value
 }
 
 data "kubectl_file_documents" "operator" {
   content = file("${path.module}/templates/operator.yaml")
 }
 
-resource "kubernetes_manifest" "elastic_operator" {
-  for_each = data.kubectl_file_documents.operator.manifests
-  manifest = each.value
+resource "kubectl_manifest" "elastic_operator" {
+  for_each  = data.kubectl_file_documents.crds.manifests
+  yaml_body = each.value
 
   depends_on = [kubernetes_manifest.elastic_crds]
 }
