@@ -17,7 +17,7 @@ resource "kubernetes_manifest" "elastic_crds" {
 }
 
 data "kubectl_file_documents" "operator" {
-  content = file("operator.yaml")
+  content = file("${path.module}/templates/operator.yaml")
 }
 
 resource "kubernetes_manifest" "elastic_operator" {
