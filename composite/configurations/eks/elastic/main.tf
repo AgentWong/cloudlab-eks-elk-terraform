@@ -27,11 +27,11 @@ resource "kubectl_manifest" "elastic_operator" {
   for_each  = data.kubectl_file_documents.crds.manifests
   yaml_body = each.value
 
-  depends_on = [kubernetes_manifest.elastic_crds]
+  depends_on = [kubectl_manifest.elastic_crds]
 }
 
 resource "time_sleep" "elastic_operator" {
-  depends_on = [kubernetes_manifest.elastic_operator]
+  depends_on = [kubectl_manifest.elastic_operator]
 
   create_duration = "60s"
 }
