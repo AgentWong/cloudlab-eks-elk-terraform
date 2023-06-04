@@ -19,14 +19,8 @@ resource "kubectl_manifest" "elastic_operator" {
   yaml_body = each.value
 }
 
-resource "time_sleep" "elastic_operator" {
-  depends_on = [kubectl_manifest.elastic_operator]
-
-  create_duration = "60s"
-}
-
 resource "kubernetes_manifest" "elasticsearch" {
   manifest = yamldecode(file("${path.module}/templates/elasticsearch.yaml"))
 
-  depends_on = [time_sleep.elastic_operator]
+  depends_on = [kubectl_manifest.elastic_operator]
 }
