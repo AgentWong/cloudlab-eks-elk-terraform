@@ -24,3 +24,21 @@ resource "kubernetes_manifest" "elasticsearch" {
 
   depends_on = [kubectl_manifest.elastic_operator]
 }
+
+resource "time_sleep" "elasticsearch" {
+  depends_on = [kubectl_manifest.elasticsearch]
+
+  create_duration = "120s"
+}
+
+resource "kubernetes_manifest" "kibana" {
+  manifest = yamldecode(file("${path.module}/templates/kibana.yaml"))
+
+  depends_on = [time_sleep.elasticsearch]
+}
+
+resource "kubernetes_manifest" "logstash" {
+  manifest = yamldecode(file("${path.module}/templates/logstash.yaml"))
+
+  depends_on = [time_sleep.elasticsearch]
+}
