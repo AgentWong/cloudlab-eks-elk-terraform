@@ -1,4 +1,4 @@
-module "ebc_csi_irsa" {
+module "ebs_csi_irsa" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version = "~> 5.0"
 
