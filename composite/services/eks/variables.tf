@@ -1,12 +1,12 @@
 variable "vpc_id" {
-    type = string
+  type = string
 }
 variable "private_subnets" {
-    type = list(string)
+  type = list(string)
 }
 variable "env" {
-    type = string
+  type = string
 }
 variable "cluster_version" {
-    type = string
+  type = string
 }

@@ -26,6 +26,11 @@ module "eks" {
   cluster_version                = var.cluster_version
   cluster_endpoint_public_access = true
 
+  cluster_encryption_config = {
+    resources        = ["secrets"]
+    provider_key_arn = module.ebs_kms_key.key_arn
+  }
+
   cluster_addons = {
     coredns = {
       most_recent = true
@@ -34,7 +39,7 @@ module "eks" {
       most_recent = true
     }
     vpc-cni = {
-      most_recent              = true
+      most_recent = true
     }
     aws-ebs-csi-driver = {
       most_recent              = true
@@ -42,8 +47,8 @@ module "eks" {
     }
   }
 
-  vpc_id                   = var.vpc_id
-  subnet_ids               = var.private_subnets
+  vpc_id     = var.vpc_id
+  subnet_ids = var.private_subnets
 
   manage_aws_auth_configmap = true
 
@@ -80,4 +85,20 @@ module "key_pair" {
 
   key_name_prefix    = local.name
   create_private_key = true
+}
+
+module "ebs_kms_key" {
+  source  = "terraform-aws-modules/kms/aws"
+  version = "~> 1.5"
+
+  description = "Customer managed key to encrypt EKS managed node group volumes"
+
+  # Policy
+  key_administrators = [
+    data.aws_caller_identity.current.arn
+  ]
+
+  # Aliases
+  aliases = ["eks/${local.name}/ebs"]
+
 }
