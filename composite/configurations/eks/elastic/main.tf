@@ -21,8 +21,8 @@ data "kubectl_file_documents" "operator" {
 }
 
 resource "kubernetes_manifest" "elastic_operator" {
-  for_each  = data.kubectl_file_documents.operator.manifests
-  yaml_body = each.value
+  for_each = data.kubectl_file_documents.operator.manifests
+  manifest = each.value
 
   depends_on = [kubernetes_manifest.elastic_crds]
 }
