@@ -26,7 +26,7 @@ resource "kubernetes_manifest" "elasticsearch" {
 }
 
 resource "time_sleep" "elasticsearch" {
-  depends_on = [kubectl_manifest.elasticsearch]
+  depends_on = [kubernetes_manifest.elasticsearch]
 
   create_duration = "120s"
 }
