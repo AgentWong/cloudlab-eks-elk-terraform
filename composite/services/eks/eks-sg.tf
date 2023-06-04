@@ -1,7 +1,7 @@
 resource "aws_security_group" "remote_access" {
   name_prefix = "${local.name}-remote-access"
   description = "Allow remote SSH access"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = var.vpc_id
 
   ingress {
     description = "SSH access"
