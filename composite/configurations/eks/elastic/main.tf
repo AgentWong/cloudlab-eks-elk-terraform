@@ -11,7 +11,9 @@ provider "kubernetes" {
 }
 
 resource "kubernetes_manifest" "elastic_crds" {
-  manifest = yamldecode(file("${path.module}/templates/crds.yaml"))
+  for_each = fileset(path.module, "templates/crds/*")
+
+  manifest = yamldecode(file("${path.module}/templates/crds/${each.value}"))
 }
 
 resource "kubernetes_manifest" "elastic_operator" {
