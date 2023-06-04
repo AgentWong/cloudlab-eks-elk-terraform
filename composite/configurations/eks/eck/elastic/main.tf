@@ -40,5 +40,9 @@ resource "kubernetes_manifest" "kibana" {
 resource "kubernetes_manifest" "logstash" {
   manifest = yamldecode(file("${path.module}/templates/logstash.yaml"))
 
+  field_manager {
+    force_conflicts = true
+  }
+
   depends_on = [time_sleep.elasticsearch]
 }
