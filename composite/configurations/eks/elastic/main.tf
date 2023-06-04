@@ -16,20 +16,25 @@ resource "kubernetes_manifest" "elastic_crds" {
   manifest = yamldecode(file("${path.module}/templates/crds/${each.value}"))
 }
 
-resource "kubernetes_manifest" "elastic_operator" {
-  manifest = yamldecode(file("${path.module}/templates/operator.yaml"))
+data "kubectl_file_documents" "operator" {
+  content = file("operator.yaml")
+}
 
-  depends_on = [ kubernetes_manifest.elastic_crds ]
+resource "kubernetes_manifest" "elastic_operator" {
+  for_each  = data.kubectl_file_documents.operator.manifests
+  yaml_body = each.value
+
+  depends_on = [kubernetes_manifest.elastic_crds]
 }
 
 resource "time_sleep" "elastic_operator" {
-    depends_on = [ kubernetes_manifest.elastic_operator ]
+  depends_on = [kubernetes_manifest.elastic_operator]
 
-    create_duration = "60s"
+  create_duration = "60s"
 }
 
 resource "kubernetes_manifest" "elasticsearch" {
   manifest = yamldecode(file("${path.module}/templates/elasticsearch.yaml"))
 
-  depends_on = [ time_sleep.elastic_operator ]
+  depends_on = [time_sleep.elastic_operator]
 }

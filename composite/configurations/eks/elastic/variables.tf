@@ -1,9 +1,9 @@
 variable "cluster_endpoint" {
-    type = string
+  type = string
 }
 variable "cluster_certificate_authority_data" {
-    type = string
+  type = string
 }
 variable "cluster_name" {
-    type = string
+  type = string
 }
