@@ -40,6 +40,8 @@ module "eks" {
     }
     vpc-cni = {
       most_recent = true
+      before_compute           = true
+      service_account_role_arn = module.vpc_cni_irsa.iam_role_arn
     }
     aws-ebs-csi-driver = {
       most_recent              = true
@@ -69,6 +71,11 @@ module "eks" {
       desired_size = 4
 
       disk_size = 50
+
+      iam_role_attach_cni_policy = true
+      iam_role_additional_policies = {
+        ssm     = data.aws_iam_policy.AmazonSSMManagedInstanceCore.arn
+      }
 
       # Remote access cannot be specified with a launch template
       remote_access = {

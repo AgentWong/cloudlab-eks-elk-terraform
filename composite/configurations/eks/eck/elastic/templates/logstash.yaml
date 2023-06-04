@@ -1,6 +1,5 @@
----
-apiVersion: kibana.k8s.elastic.co/v1
-kind: Kibana
+apiVersion: logstash.k8s.elastic.co/v1alpha1
+kind: Logstash
 metadata:
   name: quickstart
   namespace: default
