@@ -50,7 +50,7 @@ resource "kubernetes_manifest" "logstash" {
     force_conflicts = true
   }
 
-  depends_on = [time_sleep.elasticsearch]
+  depends_on = [time_sleep.kibana]
 }
 
 data "kubectl_file_documents" "fleetserver" {
