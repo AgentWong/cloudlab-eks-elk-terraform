@@ -37,6 +37,12 @@ resource "kubernetes_manifest" "kibana" {
   depends_on = [time_sleep.elasticsearch]
 }
 
+resource "time_sleep" "kibana" {
+  depends_on = [kubernetes_manifest.kibana]
+
+  create_duration = "120s"
+}
+
 resource "kubernetes_manifest" "logstash" {
   manifest = yamldecode(file("${path.module}/templates/logstash.yaml"))
 
@@ -55,5 +61,5 @@ resource "kubectl_manifest" "fleetserver" {
   for_each  = data.kubectl_file_documents.fleetserver.manifests
   yaml_body = each.value
 
-  depends_on = [time_sleep.elasticsearch]
+  depends_on = [time_sleep.kibana]
 }
