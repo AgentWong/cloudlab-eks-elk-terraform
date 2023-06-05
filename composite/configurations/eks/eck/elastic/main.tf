@@ -47,8 +47,13 @@ resource "kubernetes_manifest" "logstash" {
   depends_on = [time_sleep.elasticsearch]
 }
 
-resource "kubernetes_manifest" "fleetserver" {
-  manifest = yamldecode(file("${path.module}/templates/fleetserver.yaml"))
+data "kubectl_file_documents" "fleetserver" {
+  content = file("${path.module}/templates/fleetserver.yaml")
+}
+
+resource "kubectl_manifest" "fleetserver" {
+  for_each  = data.kubectl_file_documents.fleetserver.manifests
+  yaml_body = each.value
 
   depends_on = [time_sleep.elasticsearch]
 }
