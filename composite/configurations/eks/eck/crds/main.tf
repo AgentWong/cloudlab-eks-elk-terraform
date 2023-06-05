@@ -18,3 +18,9 @@ resource "kubectl_manifest" "crds" {
   for_each  = data.kubectl_file_documents.crds.manifests
   yaml_body = each.value
 }
+
+resource "time_sleep" "crds" {
+  depends_on = [kubectl_manifest.crds]
+
+  create_duration = "60s"
+}
