@@ -18,6 +18,6 @@ spec:
           resources:
             requests:
               memory: 4Gi
-              cpu: 8
+              cpu: 4
             limits:
               memory: 4Gi

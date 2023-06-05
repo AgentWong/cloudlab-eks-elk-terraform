@@ -2,11 +2,11 @@
 apiVersion: logstash.k8s.elastic.co/v1alpha1
 kind: Logstash
 metadata:
-  name: quickstart
+  name: logstash-quickstart
   namespace: default
 spec:
   count: 1
   elasticsearchRefs:
-    - name: quickstart
-      clusterName: quickstart
+    - name: elasticsearch-quickstart
+      clusterName: elasticsearch-quickstart
   version: 8.8.0
