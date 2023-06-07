@@ -14,9 +14,9 @@ data "kubectl_file_documents" "operator" {
   content = file("${path.module}/templates/operator.yaml")
 }
 
-resource "kubectl_manifest" "elastic_operator" {
+resource "kubernetes_manifest" "elastic_operator" {
   for_each  = data.kubectl_file_documents.operator.manifests
-  yaml_body = each.value
+  manifest = yamldecode(each.value)
 }
 
 resource "kubernetes_manifest" "elasticsearch" {
@@ -33,13 +33,7 @@ resource "kubernetes_manifest" "elasticsearch" {
     }
   }
 
-  depends_on = [kubectl_manifest.elastic_operator]
-}
-
-resource "time_sleep" "elasticsearch" {
-  depends_on = [kubernetes_manifest.elasticsearch]
-
-  create_duration = "120s"
+  depends_on = [kubernetes_manifest.elastic_operator]
 }
 
 resource "kubernetes_manifest" "kibana" {
@@ -52,13 +46,7 @@ resource "kubernetes_manifest" "kibana" {
     }
   }
 
-  depends_on = [time_sleep.elasticsearch]
-}
-
-resource "time_sleep" "kibana" {
-  depends_on = [kubernetes_manifest.kibana]
-
-  create_duration = "120s"
+  depends_on = [kubernetes_manifest.elasticsearch]
 }
 
 resource "kubernetes_manifest" "logstash" {
@@ -68,16 +56,16 @@ resource "kubernetes_manifest" "logstash" {
     force_conflicts = true
   }
 
-  depends_on = [time_sleep.kibana]
+  depends_on = [kubernetes_manifest.kibana]
 }
 
 data "kubectl_file_documents" "fleetserver" {
   content = file("${path.module}/templates/fleetserver.yaml")
 }
 
-resource "kubectl_manifest" "fleetserver" {
+resource "kubernetes_manifest" "fleetserver" {
   for_each  = data.kubectl_file_documents.fleetserver.manifests
-  yaml_body = each.value
+  manifest = yamldecode(each.value)
 
-  depends_on = [time_sleep.kibana]
+  depends_on = [kubernetes_manifest.kibana]
 }
