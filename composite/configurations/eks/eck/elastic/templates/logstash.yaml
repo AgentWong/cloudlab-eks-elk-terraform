@@ -10,3 +10,16 @@ spec:
     - name: elasticsearch-quickstart
       clusterName: elasticsearch-quickstart
   version: 8.8.0
+  pipelines:
+    - pipeline.id: main
+      config.string: |
+        input { exec { command => 'uptime' interval => 10 } } 
+        output { 
+          elasticsearch {
+            hosts => [ "${ELASTICSEARCH_QUICKSTART_ES_HOSTS}" ]
+            ssl => true
+            cacert => "${ELASTICSEARCH_QUICKSTART_ES_SSL_CERTIFICATE_AUTHORITY}"
+            user => "${ELASTICSEARCH_QUICKSTART_ES_USER}"
+            password => "${ELASTICSEARCH_QUICKSTART_ES_PASSWORD}"
+          } 
+        }

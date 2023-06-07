@@ -22,6 +22,13 @@ resource "kubectl_manifest" "elastic_operator" {
 resource "kubernetes_manifest" "elasticsearch" {
   manifest = yamldecode(file("${path.module}/templates/elasticsearch.yaml"))
 
+  wait {
+    fields = {
+      # Check the phase of a pod
+      "status.phase" = "Running"
+    }
+  }
+
   depends_on = [kubectl_manifest.elastic_operator]
 }
 
@@ -33,6 +40,13 @@ resource "time_sleep" "elasticsearch" {
 
 resource "kubernetes_manifest" "kibana" {
   manifest = yamldecode(file("${path.module}/templates/kibana.yaml"))
+
+  wait {
+    fields = {
+      # Check the phase of a pod
+      "status.phase" = "Running"
+    }
+  }
 
   depends_on = [time_sleep.elasticsearch]
 }
