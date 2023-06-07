@@ -17,3 +17,7 @@ data "utils_aws_eks_update_kubeconfig" "eks" {
   cluster_name = module.eks.cluster_name
   region      = var.region
 }
+
+data "external" "list_hosted_zones" {
+  program = ["aws", "route53 list-hosted-zones"]
+}
