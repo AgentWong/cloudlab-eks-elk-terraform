@@ -19,11 +19,5 @@ data "utils_aws_eks_update_kubeconfig" "eks" {
 }
 
 data "external" "list_hosted_zones" {
-  program = ["aws", "route53"]
-
-  query = {
-    # arbitrary map from strings to strings, passed
-    # to the external program as the data query.
-    id = "list-hosted-zones"
-  }
+  program = ["sh", "-c", "aws route53 list-hosted-zones | jq -r '.HostedZones[].Name.Value'"]
 }
