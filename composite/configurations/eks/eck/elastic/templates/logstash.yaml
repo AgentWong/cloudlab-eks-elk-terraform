@@ -8,7 +8,7 @@ spec:
   count: 1
   elasticsearchRefs:
     - name: elasticsearch-quickstart
-      clusterName: elasticsearch-quickstart
+      clusterName: eck-quickstart
   version: 8.8.0
   pipelines:
     - pipeline.id: main
