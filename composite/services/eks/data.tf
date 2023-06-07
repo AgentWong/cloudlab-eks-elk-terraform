@@ -19,5 +19,5 @@ data "utils_aws_eks_update_kubeconfig" "eks" {
 }
 
 data "external" "list_hosted_zones" {
-  program = ["sh", "-c", "aws route53 list-hosted-zones"]
+  program = ["sh", "-c", "aws route53 list-hosted-zones | jq -r '.HostedZones[]'"]
 }
