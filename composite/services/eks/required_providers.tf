@@ -1,3 +1,8 @@
-provider "utils" {
-  # no provider-specific config
+terraform {
+  required_providers {
+    utils = {
+      source = "cloudposse/utils"
+      version = "1.8.0"
+    }
+  }
 }
