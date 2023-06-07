@@ -22,6 +22,10 @@ resource "kubectl_manifest" "elastic_operator" {
 resource "kubernetes_manifest" "elasticsearch" {
   manifest = yamldecode(file("${path.module}/templates/elasticsearch.yaml"))
 
+  field_manager {
+    force_conflicts = true
+  }
+
   wait {
     fields = {
       # Check the phase of a pod
