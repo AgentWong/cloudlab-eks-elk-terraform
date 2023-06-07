@@ -14,14 +14,16 @@ data "utils_aws_eks_update_kubeconfig" "eks" {
   kubeconfig  = "~/.kube/config"
   cluster_name = module.eks.cluster_name
   region      = var.region
+
+  depends_on = [ module.eks ]
 }
 
 data "external" "list_hosted_zones" {
-  program = ["aws"]
+  program = ["aws", "route53"]
 
   query = {
     # arbitrary map from strings to strings, passed
     # to the external program as the data query.
-    id = "route53 list-hosted-zones"
+    id = "list-hosted-zones"
   }
 }
