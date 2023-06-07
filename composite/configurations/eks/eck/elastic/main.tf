@@ -29,7 +29,7 @@ resource "kubernetes_manifest" "elasticsearch" {
   wait {
     fields = {
       # Check the phase of a pod
-      "status.phase" = "Running"
+      "status.Health" = "green"
     }
   }
 
@@ -48,7 +48,7 @@ resource "kubernetes_manifest" "kibana" {
   wait {
     fields = {
       # Check the phase of a pod
-      "status.phase" = "Running"
+      "status.Health" = "green"
     }
   }
 
