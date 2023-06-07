@@ -10,11 +10,18 @@ data "aws_ami" "eks_default" {
 data "aws_caller_identity" "current" {}
 
 data "utils_aws_eks_update_kubeconfig" "eks" {
+  profile = "default"
   kubeconfig  = "~/.kube/config"
   cluster_name = module.eks.cluster_name
   region      = var.region
 }
 
 data "external" "list_hosted_zones" {
-  program = ["aws", "route53 list-hosted-zones"]
+  program = ["aws"]
+
+  query = {
+    # arbitrary map from strings to strings, passed
+    # to the external program as the data query.
+    id = "route53 list-hosted-zones"
+  }
 }
