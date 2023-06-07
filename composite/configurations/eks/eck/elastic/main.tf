@@ -27,9 +27,9 @@ resource "kubernetes_manifest" "elasticsearch" {
   }
 
   wait {
-    fields = {
-      # Check the phase of a pod
-      "status.Health" = "green"
+    condition {
+      type   = "ContainersReady"
+      status = "True"
     }
   }
 
@@ -46,9 +46,9 @@ resource "kubernetes_manifest" "kibana" {
   manifest = yamldecode(file("${path.module}/templates/kibana.yaml"))
 
   wait {
-    fields = {
-      # Check the phase of a pod
-      "status.Health" = "green"
+    condition {
+      type   = "ContainersReady"
+      status = "True"
     }
   }
 
