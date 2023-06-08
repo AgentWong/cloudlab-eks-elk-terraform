@@ -23,3 +23,17 @@ spec:
             password => "${ELASTICSEARCH_QUICKSTART_ES_PASSWORD}"
           } 
         }
+  podTemplate:
+    spec:
+      containers:
+      - name: logstash
+        resources:
+          requests:
+            memory: 1Gi
+            cpu: 1
+          limits:
+            memory: 1Gi
+            cpu: 1
+        env:
+        - name: LS_JAVA_OPTS
+          value: -Xms500m -Xmx500m
