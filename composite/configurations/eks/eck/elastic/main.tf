@@ -10,13 +10,19 @@ provider "kubernetes" {
   }
 }
 
+resource "kubernetes_manifest" "elastic_operator_namespace" {
+  manifest = yamldecode(file("${path.module}/templates/operator-namespace.yaml"))
+}
+
 data "kubectl_file_documents" "operator" {
   content = file("${path.module}/templates/operator.yaml")
 }
 
 resource "kubernetes_manifest" "elastic_operator" {
-  for_each  = data.kubectl_file_documents.operator.manifests
+  for_each = data.kubectl_file_documents.operator.manifests
   manifest = yamldecode(each.value)
+
+  depends_on = [kubernetes_manifest.elastic_operator_namespace]
 }
 
 resource "kubernetes_manifest" "elasticsearch" {
@@ -64,7 +70,7 @@ data "kubectl_file_documents" "fleetserver" {
 }
 
 resource "kubernetes_manifest" "fleetserver" {
-  for_each  = data.kubectl_file_documents.fleetserver.manifests
+  for_each = data.kubectl_file_documents.fleetserver.manifests
   manifest = yamldecode(each.value)
 
   depends_on = [kubernetes_manifest.kibana]
