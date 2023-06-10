@@ -17,13 +17,3 @@ data "utils_aws_eks_update_kubeconfig" "eks" {
 
   depends_on = [ module.eks ]
 }
-
-data "external" "list_hosted_zones" {
-  program = ["sh", "-c", "aws route53 list-hosted-zones | jq -r '[.HostedZones[]] | map({ Name: .Name}) | .[]'"]
-
-  # Note: Converting the resulting complex json object to a single property object that looks like this:
-  #{
-  #  "Name": "cmcloudlab944.info."
-  #}
-
-}
